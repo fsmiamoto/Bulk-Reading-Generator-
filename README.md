@@ -20,3 +20,7 @@ https://ankiweb.net/shared/info/1358669162
 
 ![Success](https://i.imgur.com/ueVGB65.png)
 
+## Additional Info
+
+* The add-on only generates readings for the cards that don't already have it so it will not overwrite previous reading generations
+
