@@ -16,7 +16,7 @@ https://ankiweb.net/shared/info/1358669162
 
 ![Example of Use](https://i.imgur.com/cuKni4m.png)
 
-* After that just click Ok and it should be done!
+* After that, just click OK and it should be done!
 
 ![Success](https://i.imgur.com/ueVGB65.png)
 
