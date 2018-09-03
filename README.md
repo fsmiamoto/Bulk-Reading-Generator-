@@ -16,3 +16,5 @@ An attempt to improve Anki's built-in bulk reading generator with a more intuiti
 
 * After that just click Ok and it should be done!
 
+![Success](https://i.imgur.com/a/41rzzrz.png)
+
