@@ -22,7 +22,5 @@ https://ankiweb.net/shared/info/1358669162
 
 ## Additional Info
 
-* This add-on is still under development so some bug's / errors can be expected.
-* Please check your input carefully since the add-on does not do that by now.
 * The add-on only generates readings for the cards that don't already have it so it will not overwrite previous reading generations
-
+* This add-on is still under development so some bug's / errors can be expected.
