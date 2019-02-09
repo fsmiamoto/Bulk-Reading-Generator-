@@ -1,7 +1,13 @@
 # Bulk Reading Generator Plus
 An attempt to improve Anki's built-in bulk reading generator with a more intuitive interface.
 
-https://ankiweb.net/shared/info/1358669162
+## Requirements
+ * You should have the Japanese Support installed for using this add-on
+ 
+## Features
+
+* No need to stick to the predfined field names in a file
+* You can generate readings for multiple fields at a time!
 
 ## How to Use
 
