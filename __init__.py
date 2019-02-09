@@ -116,8 +116,7 @@ class ReadingGenerator(QDialog):
 
     def on_accept(self):
         """
-            on_accept
-            Method called when the Ok button is pressed
+            Handler for Ok button, calling the generateReadings method
         """
         # Get the source field name
         src_field = self.src_sel.text()
