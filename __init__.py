@@ -12,11 +12,11 @@
 from aqt.qt import *
 from aqt.utils import showInfo
 from aqt import mw
-from sys.path import append
+import sys
 
 # Append path to use the Japanese Suport provided method
 # The number corresponds to the addon ID
-append("../3918629684")
+sys.path.append("../3918629684")
 
 # Because the name of the module is invalid, a number in this case,
 # imports japanese module with alternative syntax.
@@ -34,29 +34,44 @@ def generateReadings(select_cards, src, dst):
     # Counter for changed cards
     changed_cards = 0
 
+    # Multifield option
+    if( ';' in dst and ';' in src):
+        dst_fields = dst.strip().split(';')
+        src_fields = src.strip().split(';')
+    else:
+        # Creates list with the only pair
+        dst_fields = [ dst ]
+        src_fields = [ src ]
+
     # For every card ID in cards_id
     for card_id in cards_id:
         # Get the note
         card = mw.col.getNote(card_id)
         try:
-            # Assert the provied field names
-            assert dst in card.keys(), "Destination field inexistent!"
-            assert src in card.keys(), "Source field inexistent!"
-            # If dst field not set...
-            if not card[dst]:
-                # Get source text
-                srcTxt = mw.col.media.strip(card[src])
-                # Generate reading of srcText and output to dst
-                card[dst] = japanese.reading.mecab.reading(srcTxt)
-                # 'Save' card
-                card.flush()
-                # Increment counter
-                changed_cards += 1
+            for dst,src in zip(dst_fields, src_fields): 
+                # If the note doesn't have the fields, skip it.
+                # This is useful for decks that have multiple note types
+                if(dst not in card.keys() or src not in card.keys()):
+                    continue
+
+                # If dst field not set...
+                if not card[dst]:
+                    # Get source text
+                    srcTxt = mw.col.media.strip(card[src])
+                    # Generate reading of srcText and output to dst
+                    card[dst] = japanese.reading.mecab.reading(srcTxt)
+                    # 'Save' card
+                    card.flush()
+                    # Increment counter
+                    changed_cards += 1
         except:
             raise
 
     # Show how many cards were changed
-    showInfo(str(changed_cards) + ' cards changed!')
+    if(changed_cards > 0):
+        showInfo(str(changed_cards) + ' cards changed!')
+    else:
+        showInfo("No cards were changed!")
 
 # Generates the dialog window.
 
@@ -93,7 +108,7 @@ class ReadingGenerator(QDialog):
         # Insert deck names in ComboBox
         for name in deck_names:
             self.deck_sel.addItem(name)
-
+        
         grid = QGridLayout()
         grid.setSpacing(10)
         grid.addWidget(deck_lbl, 1, 0, 1, 1)
