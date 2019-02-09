@@ -10,13 +10,13 @@
 
 # Dependencies
 from aqt.qt import *
-from aqt.utils import showInfo, showCritical
+from aqt.utils import showInfo
 from aqt import mw
-import sys
+from sys.path import append
 
 # Append path to use the Japanese Suport provided method
 # The number corresponds to the addon ID
-sys.path.append("../3918629684")
+append("../3918629684")
 
 # Because the name of the module is invalid, a number in this case,
 # imports japanese module with alternative syntax.
@@ -52,15 +52,15 @@ def generateReadings(select_cards, src, dst):
                 card.flush()
                 # Increment counter
                 changed_cards += 1
-        except Exception as e:
-            # Show errow pop-up with the expection text
-            showCritical(str(e))
+        except:
             raise
 
     # Show how many cards were changed
     showInfo(str(changed_cards) + ' cards changed!')
 
 # Generates the dialog window.
+
+
 class ReadingGenerator(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, parent=mw)
@@ -81,7 +81,8 @@ class ReadingGenerator(QDialog):
         # Textbox's
         self.src_sel = QLineEdit()
         self.dst_sel = QLineEdit()
-        # Default values
+
+        # Default values for textboxes
         self.src_sel.setText("Expression")
         self.dst_sel.setText("Reading")
 
@@ -89,6 +90,7 @@ class ReadingGenerator(QDialog):
         deck_names = [dk['name'] for dk in decks.values()]
         # Sort names
         deck_names.sort()
+        # Insert deck names in ComboBox
         for name in deck_names:
             self.deck_sel.addItem(name)
 
