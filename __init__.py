@@ -48,6 +48,9 @@ def generateReadings(select_cards, src, dst):
         # Get the note
         card = mw.col.getNote(card_id)
         try:
+            # If any field is changed, it will be set to true
+            changed_any_field = False
+            # For every pair of filds in dst and src
             for dst,src in zip(dst_fields, src_fields): 
                 # If the note doesn't have the fields, skip it.
                 # This is useful for decks that have multiple note types
@@ -62,8 +65,11 @@ def generateReadings(select_cards, src, dst):
                     card[dst] = japanese.reading.mecab.reading(srcTxt)
                     # 'Save' card
                     card.flush()
-                    # Increment counter
-                    changed_cards += 1
+                    changed_any_field = True
+
+            # Increment if any field of this note was changed
+            if changed_any_field:
+                changed_cards += 1
         except:
             raise
 
@@ -74,8 +80,6 @@ def generateReadings(select_cards, src, dst):
         showInfo("No cards were changed!")
 
 # Generates the dialog window.
-
-
 class ReadingGenerator(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, parent=mw)
