@@ -1,5 +1,5 @@
 #
-# Bulk Reading Generator Plus
+# Bulk Reading Generator Plus - Anki 2.0 Version
 #
 # An attempt to improve the buld reading generation
 # interface.
@@ -12,36 +12,38 @@
 from aqt.qt import *
 from aqt.utils import showInfo
 from aqt import mw
-import sys
-
-# Append path to use the Japanese Suport provided method
-# The number corresponds to the addon ID
-sys.path.append("../3918629684")
-
-# Because the name of the module is invalid, a number in this case,
-# imports japanese module with alternative syntax.
-japanese = __import__("3918629684")
-
+from japanese.reading import mecab
 
 def generateReadings(select_cards, src, dst):
     """
         generateReadings - Generates the readings for
         cards selected with 'select_cards' and then getting the source text from 'src' and
         outputs to 'dst'
+
+        select_cards - String that query's for the wanted cards
+        Example: "deck:Sentences"
+
+        src - Name of the source field. It can have more than one field separeted with ;
+        Example: "Expression", "Expression;Word"
+
+        dst - Destination fields
+        Example: "Reading", "Expression Reading;Word Reading"
     """
-    # Get cards from collection
-    cards_id = mw.col.findNotes(select_cards)
+    # Get the ID's of cards selected with the select_cards string 
+    cards_id = mw.col.findNotes(select_cards) # e.g select_cards = "deck:Sentences"
     # Counter for changed cards
     changed_cards = 0
 
-    # Multifield option
+    # Multi field 
     if( ';' in dst and ';' in src):
-        dst_fields = dst.strip().split(';')
-        src_fields = src.strip().split(';')
+        # Splits in ';' and removes extra whitespace
+        dst_fields = [d.strip() for d in dst.split(';')]
+        src_fields = [s.strip() for s in src.split(';')]
+    # Single field 
     else:
         # Creates list with the only pair
-        dst_fields = [ dst ]
-        src_fields = [ src ]
+        dst_fields = [ dst.strip() ]
+        src_fields = [ src.strip() ]
 
     # For every card ID in cards_id
     for card_id in cards_id:
@@ -50,19 +52,18 @@ def generateReadings(select_cards, src, dst):
         try:
             # If any field is changed, it will be set to true
             changed_any_field = False
-            # For every pair of filds in dst and src
+            # For every pair of fields in dst and src
             for dst,src in zip(dst_fields, src_fields): 
                 # If the note doesn't have the fields, skip it.
-                # This is useful for decks that have multiple note types
                 if(dst not in card.keys() or src not in card.keys()):
-                    continue
+                    continue  # This is useful for decks that have multiple note types
 
                 # If dst field not set...
                 if not card[dst]:
                     # Get source text
                     srcTxt = mw.col.media.strip(card[src])
                     # Generate reading of srcText and output to dst
-                    card[dst] = japanese.reading.mecab.reading(srcTxt)
+                    card[dst] = mecab.reading(srcTxt)
                     # 'Save' card
                     card.flush()
                     changed_any_field = True
