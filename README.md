@@ -28,18 +28,18 @@ An attempt to improve Anki's built-in bulk reading generator with a more intuiti
 
 Let's take an example card where you have the following fields:
 
-![Fields](https://i.imgur.com/u2s1zpy.png)
+![Fields](https://i.imgur.com/TX3DLIh.png)
 
 In this example, suppose you want to generate readings for **both** Expression and Word.
 You can then type the fields, just like you would if you only wanted generate for one field, and separate with ";"
 
-![Example Multiple](https://i.imgur.com/OOPbBUs.png)
+![Example Multiple](https://i.imgur.com/7RmeGIO.png)
 
 In this case, the text in Expression would be used to generate the text for Expression Reading and the text in Word would be used to generate the text for Word Reading.
 
 If everything is typed correctly, you can click Ok and it should be done!
 
-![Multiple sucess](https://i.imgur.com/tm1KHYz.png)
+![Multiple sucess](https://i.imgur.com/YIlfBP6.png)
 
 # Additional Info
 
