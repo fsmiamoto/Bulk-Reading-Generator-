@@ -1,6 +1,8 @@
 # Bulk Reading Generator Plus
 An attempt to improve Anki's built-in bulk reading generator with a more intuitive interface.
 
+https://ankiweb.net/shared/info/925924910
+
 ## Requirements
  * You should have the [Japanese Support](https://ankiweb.net/shared/info/3918629684) installed for using this add-on
   
