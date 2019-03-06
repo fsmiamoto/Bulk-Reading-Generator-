@@ -22,7 +22,8 @@ sys.path.append("../3918629684")
 # imports japanese module with alternative syntax.
 japanese = __import__("3918629684")
 
-def generateReadings(selectNotes, source, destination):
+
+def generateReadings(selectNotes, source, destination, allowOverwriting):
     """
         generateReadings - Generates the readings for
         notes selected with 'selectNotes' and then getting the source text from 'source' and
@@ -36,9 +37,13 @@ def generateReadings(selectNotes, source, destination):
 
         destination - Destination fields
         Example: "Reading", "Expression Reading;Word Reading"
+
+        allowOverwriting - Boolean value that determines if fields that are already populated 
+        can be overwriten.
     """
     # Get the ID's of notes selected with the selectNotes string
-    noteIds = mw.col.findNotes(selectNotes) # e.g selectNotes = "deck:Sentences"
+    # e.g selectNotes = "deck:Sentences"
+    noteIds = mw.col.findNotes(selectNotes)
 
     # Counter for changed notes
     changedNotes = 0
@@ -66,7 +71,7 @@ def generateReadings(selectNotes, source, destination):
                     continue  # This is useful for decks that have multiple note types
 
                 # If destination field not set...
-                if not note[destination]:
+                if allowOverwriting or not note[destination]:
                     # Get text from source field
                     sourceTxt = mw.col.media.strip(note[source])
                     # Generate reading of sourceText and output to destination
@@ -87,6 +92,8 @@ def generateReadings(selectNotes, source, destination):
         showInfo("No notes were changed!")
 
 # Generates the dialog window.
+
+
 class ReadingGenerator(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, parent=mw)
@@ -100,6 +107,7 @@ class ReadingGenerator(QDialog):
         deckLbl = QLabel("Deck Name")
         sourceLbl = QLabel("Source field")
         destinationLbl = QLabel("Destination field")
+        overwriteLbl = QLabel("Allow overwriting?")
 
         # ComboBox for showing deck's names
         self.deckSel = QComboBox()
@@ -107,6 +115,9 @@ class ReadingGenerator(QDialog):
         # Textbox's
         self.sourceSel = QLineEdit()
         self.destinationSel = QLineEdit()
+
+        # CheckBox
+        self.overwriteCheckBox = QCheckBox()
 
         # Default values for textboxes
         self.sourceSel.setText("Expression")
@@ -128,9 +139,11 @@ class ReadingGenerator(QDialog):
         grid.addWidget(self.sourceSel, 2, 1, 1, 2)
         grid.addWidget(destinationLbl, 3, 0, 1, 1)
         grid.addWidget(self.destinationSel, 3, 1, 1, 2)
+        grid.addWidget(overwriteLbl, 4, 0, 1, 1)
+        grid.addWidget(self.overwriteCheckBox, 4, 1, 1, 2)
 
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok
-                                      | QDialogButtonBox.Cancel)
+                                     | QDialogButtonBox.Cancel)
         buttonBox.accepted.connect(self.onAccept)
         buttonBox.rejected.connect(self.onReject)
         lMain = QVBoxLayout()
@@ -150,8 +163,11 @@ class ReadingGenerator(QDialog):
         destinationField = self.destinationSel.text()
         # String to query for the notes on the selected deck
         deckField = "deck:'" + self.deckSel.currentText() + "'"
+        # CheckBox Value Boolean Value
+        checkBoxValue = bool(self.overwriteCheckBox.checkState())
         # Generate readings with the obtained info
-        generateReadings(deckField, sourceField, destinationField)
+        generateReadings(deckField, sourceField,
+                         destinationField, checkBoxValue)
 
     def onReject(self):
         self.close()
